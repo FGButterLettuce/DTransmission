@@ -1,14 +1,45 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Ionic Blank
+      Transmission App
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
+<ion-content padding>
+  <ion-button full class="submit-button" (click)="showPaired()">
+    <ion-icon name="refresh"></ion-icon>&nbsp;Refresh Bluetooth Devices</ion-button>
+  <ion-row>
+    <ion-col>
+      <ion-list>
+        <ion-radio-group>
+        <ion-item *ngFor="let i of pairedList; let j = index">
+          <ion-label>{{i.name}}</ion-label>
+          <ion-radio value="{{j}}" (ionSelect)="radioChange(j)"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+  <ion-button full class="submit-button" *ngIf="listToggle" (click)="selectDevice()">
+  <ion-icon name="bluetooth"></ion-icon>&nbsp;Connect Bluetooth Devices
+  </ion-button>
+  <ion-list>
+    <ion-item>
+      <ion-input placeholder= "Insert Text" type="text" [(ngModel)]="dataSend" ></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-button full class="submit-button" (click)="sendData()">
+    <ion-icon name="send"></ion-icon>&nbsp;Send
+  </ion-button>
+  <ion-button full class="submit-button" (click)="deviceDisconnected()">
+    <ion-icon name="send"></ion-icon>&nbsp;Disconnect
+  </ion-button>
+
+
+  <ion-card>
+      <ion-card-content>
+        {{dataReceived}}
+      </ion-card-content>
+  </ion-card>
 </ion-content>
