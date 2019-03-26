@@ -38,8 +38,8 @@
 
 
   <ion-card>
-      <ion-card-content>
-        {{dataReceived}}
+      <ion-card-content *ngIf="DataLine!=null">
+        Humidity: {{DataLine.humidity}}<br>Temperature: {{DataLine.temperature}}    
       </ion-card-content>
   </ion-card>
 </ion-content>

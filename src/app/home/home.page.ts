@@ -14,11 +14,12 @@ export class HomePage {
   listToggle: boolean = false;
   dataSend: string = "";
   dataReceived: string = "";
-  
-
+  DataLine: dataline; 
   constructor(private bluetoothSerial: BluetoothSerial, private alertCtrl: AlertController, private toastCtrl: ToastController) { 
     this.checkBluetoothEnabled();
   }
+
+ 
 
   checkBluetoothEnabled() {
     this.bluetoothSerial.isEnabled().then(success => {
@@ -82,7 +83,7 @@ export class HomePage {
 
   
   deviceDisconnected() {
-    // Unsubscribe from data receiving
+    // Disconnect
     this.bluetoothSerial.disconnect();
     this.showToast("Device Disconnected");
   }
@@ -90,8 +91,11 @@ export class HomePage {
 
   handleData(data) {
     this.dataReceived=data.toString();
+    var values= this.dataReceived.split(',');
+    console.log(values[0],values[1]);
+    var x= new dataline(parseFloat(values[0]),parseFloat(values[1]));
+    this.DataLine = x;
     console.log(this.dataReceived);
-    this.showToast(data);
   }
 
 
@@ -133,3 +137,11 @@ interface pairedlist{
   "address": string,
   "name": string
 }
+class dataline{
+  humidity: number = 0;
+  temperature: number = 0;
+  constructor(hum:number,tem:number){
+    this.humidity=hum;
+    this.temperature=tem;
+  }  
+} 
