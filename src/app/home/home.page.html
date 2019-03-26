@@ -38,7 +38,7 @@
 
 
   <ion-card>
-      <ion-card-content *ngIf="DataLine!=null">
+      <ion-card-content *ngIf="cardToggle" (click)="refresh">
         Humidity: {{DataLine.humidity}}<br>Temperature: {{DataLine.temperature}}    
       </ion-card-content>
   </ion-card>

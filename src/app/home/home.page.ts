@@ -12,6 +12,7 @@ export class HomePage {
   pairedList: pairedlist;
   pairedDeviceID: number = 0;
   listToggle: boolean = false;
+  cardToggle: boolean = false;
   dataSend: string = "";
   dataReceived: string = "";
   DataLine: dataline; 
@@ -75,7 +76,7 @@ export class HomePage {
     // Subscribe to data receiving as soon as the delimiter is read
     this.bluetoothSerial.subscribe('\n').subscribe(success => {
       this.handleData(success);
-      this.showToast("Connected Successfullly");
+      //this.showToast("Connected Successfullly");
     }, error => {
       this.showError(error);
     });
@@ -92,9 +93,10 @@ export class HomePage {
   handleData(data) {
     this.dataReceived=data.toString();
     var values= this.dataReceived.split(',');
-    console.log(values[0],values[1]);
-    var x= new dataline(parseFloat(values[0]),parseFloat(values[1]));
-    this.DataLine = x;
+    console.log(Number(values[0]),Number(values[1]));
+    copy= new dataline(parseFloat(values[0]),parseFloat(values[1]));
+    this.DataLine = copy;
+    this.cardToggle = true;
     console.log(this.dataReceived);
   }
 
@@ -145,3 +147,5 @@ class dataline{
     this.temperature=tem;
   }  
 } 
+
+var copy:dataline;
