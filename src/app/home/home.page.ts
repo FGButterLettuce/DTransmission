@@ -8,6 +8,8 @@ import { AlertController, ToastController } from '@ionic/angular';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
+
+
 export class HomePage {
   pairedList: pairedlist;
   pairedDeviceID: number = 0;
@@ -93,8 +95,8 @@ export class HomePage {
   handleData(data) {
     this.dataReceived=data.toString();
     var values= this.dataReceived.split(',');
-    console.log(Number(values[0]),Number(values[1]));
-    copy= new dataline(parseFloat(values[0]),parseFloat(values[1]));
+    console.log(Number(values[0]),Number(values[1]),Number(values[2]),Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]));
+    copy= new dataline(Number(values[0]),Number(values[1]),Number(values[2]),Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]));
     this.DataLine = copy;
     this.cardToggle = true;
     console.log(this.dataReceived);
@@ -139,12 +141,32 @@ interface pairedlist{
   "address": string,
   "name": string
 }
+
+
 class dataline{
   humidity: number = 0;
   temperature: number = 0;
-  constructor(hum:number,tem:number){
+  co:  number = 0;
+  co2: number = 0;
+  nh4: number = 0;
+  eth: number = 0;
+  tol: number = 0;
+  ace: number = 0;
+  lat: number = 0;
+  lon: number = 0;
+  time: String;
+  date: String;
+  constructor(hum:number,tem:number,co:number,co2: number,nh4: number,eth: number,tol: number,ace: number){
     this.humidity=hum;
     this.temperature=tem;
+    this.co=co;
+    this.co2=co2;
+    this.nh4=nh4;
+    this.eth=eth;
+    this.tol=tol;
+    this.ace=ace;
+    this.time= new Date().toLocaleTimeString();
+    this.date= new Date().toLocaleDateString();
   }  
 } 
 
