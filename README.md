@@ -1,12 +1,12 @@
 # Using the application
 
 ## Prerequisites
-  Node.js
-  Ionic
-  Cordova
-  OpenJDK
-  Android SDK
-  Android Phone with USB Debugging Enabled
+  * Node.js
+  * Ionic
+  * Cordova
+  * OpenJDK
+  * Android SDK
+  * Android Phone with USB Debugging Enabled
 # Instructions 
   clone the git, run
   ```
