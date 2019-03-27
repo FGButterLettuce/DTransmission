@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
+import { Platform } from '@ionic/angular';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 
 @Component({
@@ -18,12 +20,25 @@ export class HomePage {
   dataSend: string = "";
   dataReceived: string = "";
   DataLine: dataline; 
-  constructor(private bluetoothSerial: BluetoothSerial, private alertCtrl: AlertController, private toastCtrl: ToastController) { 
+  locationsetbefore = false;
+  coords: Coordinates;
+
+
+
+  constructor(private bluetoothSerial: BluetoothSerial, private alertCtrl: AlertController,
+    private toastCtrl: ToastController, private platform: Platform, public geolocation: Geolocation) {     
+//  Removed from original as it serves no purpose
+     geolocation.getCurrentPosition()
+      .then(position => {
+        this.coords = position.coords;
+      })
+      .catch((error) => {
+        console.log('error', error);
+      }) 
     this.checkBluetoothEnabled();
   }
 
  
-
   checkBluetoothEnabled() {
     this.bluetoothSerial.isEnabled().then(success => {
       this.showPaired();
@@ -86,20 +101,44 @@ export class HomePage {
 
   
   deviceDisconnected() {
-    // Disconnect
+    // Disconnect device
     this.bluetoothSerial.disconnect();
     this.showToast("Device Disconnected");
   }
 
 
   handleData(data) {
-    this.dataReceived=data.toString();
-    var values= this.dataReceived.split(',');
-    console.log(Number(values[0]),Number(values[1]),Number(values[2]),Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]));
-    copy= new dataline(Number(values[0]),Number(values[1]),Number(values[2]),Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]));
-    this.DataLine = copy;
+    this.dataReceived = data.toString();
+    var values= this.dataReceived.split(','); //splitting on delimiter
+
+    // if(this.locationsetbefore == false){
+      this.trackPosition; //setting initial coordinates
+      this.locationsetbefore = true;
+    // }
+    
+    console.log(Number(values[0]),Number(values[1]),Number(values[2]),Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]),this.coords);
+    
+    copy= new dataline(Number(values[0]),Number(values[1]),Number(values[2]),
+      Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]),this.coords); //creating new item
+    this.DataLine = copy; //copy to app display
     this.cardToggle = true;
-    console.log(this.dataReceived);
+  }
+
+
+  trackPosition=()=>{
+    this.geolocation.getCurrentPosition().then(position => {
+        this.handleMovement(position.coords);
+      })
+      .catch(error => {
+        console.log("error", error);
+      });
+  };
+
+
+  handleMovement(data){
+      this.coords = data
+      console.log(data);
+      //this.showNotification();
   }
 
 
@@ -135,6 +174,7 @@ export class HomePage {
   }
 }
 
+
 interface pairedlist{
   "class": number,
   "id": string,
@@ -152,11 +192,10 @@ class dataline{
   eth: number = 0;
   tol: number = 0;
   ace: number = 0;
-  lat: number = 0;
-  lon: number = 0;
+  loc: Coordinates;
   time: String;
   date: String;
-  constructor(hum:number,tem:number,co:number,co2: number,nh4: number,eth: number,tol: number,ace: number){
+  constructor(hum:number,tem:number,co:number,co2: number,nh4: number,eth: number,tol: number,ace: number,loc:Coordinates){
     this.humidity=hum;
     this.temperature=tem;
     this.co=co;
@@ -167,7 +206,9 @@ class dataline{
     this.ace=ace;
     this.time= new Date().toLocaleTimeString();
     this.date= new Date().toLocaleDateString();
+    this.loc=loc;
   }  
 } 
+
 
 var copy:dataline;
