@@ -6,6 +6,7 @@
   * Cordova
   * OpenJDK
   * Android SDK
+  * Gradle
   * Android Phone with USB Debugging Enabled
 # Instructions 
   clone the git, run
