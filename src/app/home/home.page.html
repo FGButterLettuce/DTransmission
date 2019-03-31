@@ -35,12 +35,15 @@
   <ion-button full class="submit-button" (click)="deviceDisconnected()">
     <ion-icon name="send"></ion-icon>&nbsp;Disconnect
   </ion-button>
-
+  <ion-button full class="submit-button" (click)="backgroundSet()">
+    <ion-icon name="send"></ion-icon>&nbsp;Send to background
+  </ion-button>
 
   <ion-card>
       <ion-card-content *ngIf="cardToggle" (click)="refresh">
         Humidity: {{DataLine.humidity}}<br>Temperature: {{DataLine.temperature}}<br>CO: {{DataLine.co}}<br>CO2: {{DataLine.co2}}<br>NH4: {{DataLine.nh4}}<br>
-        Ethanol: {{DataLine.eth}}<br>Toluene: {{DataLine.tol}}<br>Acetone: {{DataLine.ace}}<br>Time: {{DataLine.time}}<br>Date: {{DataLine.date}}
+        Ethanol: {{DataLine.eth}}<br>Toluene: {{DataLine.tol}}<br>Acetone: {{DataLine.ace}}<br>Time: {{DataLine.time}}<br>Date: {{DataLine.date}}<br> Latitude: {{DataLine.loc.latitude}}
+        <br> Longitude: {{DataLine.loc.longitude}}
       </ion-card-content>
   </ion-card>
 </ion-content>
