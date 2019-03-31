@@ -3,6 +3,9 @@ import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { Platform } from '@ionic/angular';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { DbService } from 'src/app/services/db.service'; // to get app services
+import { Dataline } from 'src/app/dataline';
+import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 
 
 @Component({
@@ -17,16 +20,17 @@ export class HomePage {
   pairedDeviceID: number = 0;
   listToggle: boolean = false;
   cardToggle: boolean = false;
-  dataSend: string = "";
-  dataReceived: string = "";
-  DataLine: dataline; 
+  dataSend: string = ""; // for start stop
+  dataReceived: string = ""; //for start stop
+  DataLine: Dataline; 
   locationsetbefore = false;
   coords: Coordinates;
 
-
+  list:AngularFirestoreCollection<Dataline>;
+  
 
   constructor(private bluetoothSerial: BluetoothSerial, private alertCtrl: AlertController,
-    private toastCtrl: ToastController, private platform: Platform, public geolocation: Geolocation) {     
+    private toastCtrl: ToastController, private platform: Platform, public geolocation: Geolocation, public db: DbService, public afs: AngularFirestore) {     
 //  Removed from original as it serves no purpose
      geolocation.getCurrentPosition()
       .then(position => {
@@ -36,8 +40,14 @@ export class HomePage {
         console.log('error', error);
       }) 
     this.checkBluetoothEnabled();
+    this.list = this.afs.collection<Dataline>('data');
+
   }
 
+  addLine(line: Dataline){
+    const param = JSON.parse(JSON.stringify(line));    
+    this.list.add(param);
+  }
  
   checkBluetoothEnabled() {
     this.bluetoothSerial.isEnabled().then(success => {
@@ -118,10 +128,11 @@ export class HomePage {
     
     console.log(Number(values[0]),Number(values[1]),Number(values[2]),Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]),this.coords);
     
-    copy= new dataline(Number(values[0]),Number(values[1]),Number(values[2]),
+    copy= new Dataline(Number(values[0]),Number(values[1]),Number(values[2]),
       Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]),this.coords); //creating new item
     this.DataLine = copy; //copy to app display
     this.cardToggle = true;
+    this.addLine(copy);
   }
 
 
@@ -183,32 +194,32 @@ interface pairedlist{
 }
 
 
-class dataline{
-  humidity: number = 0;
-  temperature: number = 0;
-  co:  number = 0;
-  co2: number = 0;
-  nh4: number = 0;
-  eth: number = 0;
-  tol: number = 0;
-  ace: number = 0;
-  loc: Coordinates;
-  time: String;
-  date: String;
-  constructor(hum:number,tem:number,co:number,co2: number,nh4: number,eth: number,tol: number,ace: number,loc:Coordinates){
-    this.humidity=hum;
-    this.temperature=tem;
-    this.co=co;
-    this.co2=co2;
-    this.nh4=nh4;
-    this.eth=eth;
-    this.tol=tol;
-    this.ace=ace;
-    this.time= new Date().toLocaleTimeString();
-    this.date= new Date().toLocaleDateString();
-    this.loc=loc;
-  }  
-} 
+// class dataline{
+//   humidity: number = 0;
+//   temperature: number = 0;
+//   co:  number = 0;
+//   co2: number = 0;
+//   nh4: number = 0;
+//   eth: number = 0;
+//   tol: number = 0;
+//   ace: number = 0;
+//   loc: Coordinates;
+//   time: String;
+//   date: String;
+//   constructor(hum:number,tem:number,co:number,co2: number,nh4: number,eth: number,tol: number,ace: number,loc:Coordinates){
+//     this.humidity=hum;
+//     this.temperature=tem;
+//     this.co=co;
+//     this.co2=co2;
+//     this.nh4=nh4;
+//     this.eth=eth;
+//     this.tol=tol;
+//     this.ace=ace;
+//     this.time= new Date().toLocaleTimeString();
+//     this.date= new Date().toLocaleDateString();
+//     this.loc=loc;
+//   }  
+// } 
 
 
-var copy:dataline;
+var copy:Dataline;
