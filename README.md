@@ -10,7 +10,8 @@
   * Android Phone with USB Debugging Enabled
 # Instructions 
   clone the git, run
-  ``` $ ionic cordova prepare android
+  ``` 
+      $ ionic cordova prepare android
       $ npm install
   ``` 
 in the root directory,
