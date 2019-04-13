@@ -23,7 +23,7 @@ export class Dataline {
     this.ace = ace;
     this.time = new Date().toLocaleTimeString();
     this.date = new Date().toLocaleDateString();
-    this.coords = coords;
+//    this.coords = coords;
     this.lat = coords.latitude;
     this.lon = coords.longitude;
   }  

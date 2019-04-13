@@ -23,7 +23,6 @@ export class HomePage {
   dataSend: string = ""; // for start stop
   dataReceived: string = ""; //for start stop
   DataLine: Dataline; 
-  locationsetbefore = false;
   coords: Coordinates;
 
   list:AngularFirestoreCollection<Dataline>;
@@ -31,22 +30,14 @@ export class HomePage {
 
   constructor(private bluetoothSerial: BluetoothSerial, private alertCtrl: AlertController,
     private toastCtrl: ToastController, private platform: Platform, public geolocation: Geolocation, public db: DbService, public afs: AngularFirestore) {     
-//  Removed from original as it serves no purpose
-     geolocation.getCurrentPosition()
-      .then(position => {
-        this.coords = position.coords;
-      })
-      .catch((error) => {
-        console.log('error', error);
-      }) 
     this.checkBluetoothEnabled();
-    this.list = this.afs.collection<Dataline>('data');
+    this.list = this.afs.collection<Dataline>('loctest');
 
   }
 
   addLine(line: Dataline){
-    const param = JSON.parse(JSON.stringify(line));    
-    this.list.add(param);
+    setTimeout(()=>{const param = JSON.parse(JSON.stringify(line));    
+    this.list.add(param);},5000);
   }
  
   checkBluetoothEnabled() {
@@ -91,7 +82,7 @@ export class HomePage {
   connect(address) {
     // Attempt to connect device with specified address, call app.deviceConnected if success
     this.bluetoothSerial.connect(address).subscribe(success => {
-      this.deviceConnected();
+        this.deviceConnected();
       this.showToast("Successfully Connected");
     }, error => {
       this.showError("Error:Connecting to Device");
@@ -120,36 +111,47 @@ export class HomePage {
   handleData(data) {
     this.dataReceived = data.toString();
     var values= this.dataReceived.split(','); //splitting on delimiter
-
-    // if(this.locationsetbefore == false){
-      this.trackPosition; //setting initial coordinates
-      this.locationsetbefore = true;
-    // }
-    
-    console.log(Number(values[0]),Number(values[1]),Number(values[2]),Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]),this.coords);
-    
-    copy= new Dataline(Number(values[0]),Number(values[1]),Number(values[2]),
-      Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]),this.coords); //creating new item
-    this.DataLine = copy; //copy to app display
-    this.cardToggle = true;
-    this.addLine(copy);
+    this.handleMovement()
+    if(values[2]!=null){
+      console.log(Number(values[0]),Number(values[1]),Number(values[2]),Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]),this.coords);
+      
+      copy= new Dataline(Number(values[0]),Number(values[1]),Number(values[2]),
+        Number(values[3]),Number(values[4]),Number(values[5]),Number(values[6]),Number(values[7]),this.coords); //creating new item
+      this.DataLine = copy; //copy to app display
+      this.cardToggle = true;
+      this.addLine(copy);
+    }
   }
 
 
-  trackPosition=()=>{
-    this.geolocation.getCurrentPosition().then(position => {
-        this.handleMovement(position.coords);
-      })
+  // trackPosition=()=>{
+  //   let locopt={
+  //     enableHighAccuracy: true,
+  //     timeout: 5000     
+  //   }
+  //   this.geolocation.getCurrentPosition(locopt).then(position => {
+  //       this.handleMovement(position.coords);
+  //     })
+  //     .catch(error => {
+  //       console.log("error", error);
+  //     });
+  // };
+
+
+  handleMovement(){
+    let locopt={
+      enableHighAccuracy: true,
+      timeout: 5000     
+    }
+    this.geolocation.getCurrentPosition(locopt).then(position => {
+      this.coords = position.coords;
+      console.log(this.coords.latitude);
+      console.log(this.coords.longitude);
+      console.log(this.coords.speed);      })
       .catch(error => {
         console.log("error", error);
       });
-  };
-
-
-  handleMovement(data){
-      this.coords = data
-      console.log(data);
-      //this.showNotification();
+      
   }
 
 
@@ -194,32 +196,6 @@ interface pairedlist{
 }
 
 
-// class dataline{
-//   humidity: number = 0;
-//   temperature: number = 0;
-//   co:  number = 0;
-//   co2: number = 0;
-//   nh4: number = 0;
-//   eth: number = 0;
-//   tol: number = 0;
-//   ace: number = 0;
-//   loc: Coordinates;
-//   time: String;
-//   date: String;
-//   constructor(hum:number,tem:number,co:number,co2: number,nh4: number,eth: number,tol: number,ace: number,loc:Coordinates){
-//     this.humidity=hum;
-//     this.temperature=tem;
-//     this.co=co;
-//     this.co2=co2;
-//     this.nh4=nh4;
-//     this.eth=eth;
-//     this.tol=tol;
-//     this.ace=ace;
-//     this.time= new Date().toLocaleTimeString();
-//     this.date= new Date().toLocaleDateString();
-//     this.loc=loc;
-//   }  
-// } 
 
 
 var copy:Dataline;
