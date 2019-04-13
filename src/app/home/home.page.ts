@@ -31,7 +31,7 @@ export class HomePage {
   constructor(private bluetoothSerial: BluetoothSerial, private alertCtrl: AlertController,
     private toastCtrl: ToastController, private platform: Platform, public geolocation: Geolocation, public db: DbService, public afs: AngularFirestore) {     
     this.checkBluetoothEnabled();
-    this.list = this.afs.collection<Dataline>('loctest');
+    this.list = this.afs.collection<Dataline>('data');
 
   }
 
@@ -122,20 +122,6 @@ export class HomePage {
       this.addLine(copy);
     }
   }
-
-
-  // trackPosition=()=>{
-  //   let locopt={
-  //     enableHighAccuracy: true,
-  //     timeout: 5000     
-  //   }
-  //   this.geolocation.getCurrentPosition(locopt).then(position => {
-  //       this.handleMovement(position.coords);
-  //     })
-  //     .catch(error => {
-  //       console.log("error", error);
-  //     });
-  // };
 
 
   handleMovement(){
