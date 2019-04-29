@@ -8,6 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -17,6 +18,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -24,6 +26,7 @@ import { environment } from 'src/environments/environment';
     AngularFirestoreModule
   ],
   providers: [
+    BackgroundMode,
     StatusBar,
     SplashScreen,
     BluetoothSerial,

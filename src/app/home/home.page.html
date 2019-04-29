@@ -1,49 +1,48 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar text-center color="primary">
     <ion-title>
-      Transmission App
+      <b>Transmission App</b>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-button full class="submit-button" (click)="showPaired()">
-    <ion-icon name="refresh"></ion-icon>&nbsp;Refresh Bluetooth Devices</ion-button>
+<ion-content>
   <ion-row>
-    <ion-col>
-      <ion-list>
-        <ion-radio-group>
-        <ion-item *ngFor="let i of pairedList; let j = index">
-          <ion-label>{{i.name}}</ion-label>
-          <ion-radio value="{{j}}" (ionSelect)="radioChange(j)"></ion-radio>
-        </ion-item>
-      </ion-radio-group>
-      </ion-list>
+    <ion-col text-center>
+      <ion-button  (click)="showPaired()">
+        <ion-icon name="refresh"></ion-icon>&nbsp;Refresh Available Bluetooth Devices
+      </ion-button>
+
+      <ion-col>
+        <ion-list>
+          <ion-radio-group>
+            <ion-item *ngFor="let i of pairedList; let j = index">
+              <ion-label>{{i.name}}</ion-label>
+              <ion-radio value="{{j}}" (ionSelect)="radioChange(j)"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+        <ion-button  (click)="selectDevice()" *ngIf="listToggle">
+          <ion-icon name="bluetooth"></ion-icon>&nbsp;Connect Bluetooth Devices
+        </ion-button>
+      </ion-col>
+
+
+      <ion-button  size="medium" (click)="deviceDisconnected()">
+        <ion-icon name="cut"></ion-icon>&nbsp;Disconnect
+      </ion-button>
+      <!-- <ion-button  size="medium" (click)="sleep()">
+        <ion-icon name="albums"></ion-icon>&nbsp;Send to background
+      </ion-button> -->
+      <ion-card>
+        <ion-card-content *ngIf="cardToggle">
+          Humidity: {{DataLine.humidity}}<br>Temperature: {{DataLine.temperature}}<br>CO: {{DataLine.co}}<br>CO2:
+          {{DataLine.co2}}<br>NH4: {{DataLine.nh4}}<br>
+          Ethanol: {{DataLine.eth}}<br>Toluene: {{DataLine.tol}}<br>Acetone: {{DataLine.ace}}<br>Time:
+          {{DataLine.time}}<br>Date: {{DataLine.date}}<br> Latitude: {{DataLine.lon}}
+          <br> Longitude: {{DataLine.lat}}
+        </ion-card-content>
+      </ion-card>
     </ion-col>
   </ion-row>
-  <ion-button full class="submit-button" *ngIf="listToggle" (click)="selectDevice()">
-  <ion-icon name="bluetooth"></ion-icon>&nbsp;Connect Bluetooth Devices
-  </ion-button>
-  <ion-list>
-    <ion-item>
-      <ion-input placeholder= "Insert Text" type="text" [(ngModel)]="dataSend" ></ion-input>
-    </ion-item>
-  </ion-list>
-  <ion-button full class="submit-button" (click)="sendData()">
-    <ion-icon name="send"></ion-icon>&nbsp;Send
-  </ion-button>
-  <ion-button full class="submit-button" (click)="deviceDisconnected()">
-    <ion-icon name="send"></ion-icon>&nbsp;Disconnect
-  </ion-button>
-  <ion-button full class="submit-button" (click)="backgroundSet()">
-    <ion-icon name="send"></ion-icon>&nbsp;Send to background
-  </ion-button>
-
-  <ion-card>
-      <ion-card-content *ngIf="cardToggle" (click)="refresh">
-        Humidity: {{DataLine.humidity}}<br>Temperature: {{DataLine.temperature}}<br>CO: {{DataLine.co}}<br>CO2: {{DataLine.co2}}<br>NH4: {{DataLine.nh4}}<br>
-        Ethanol: {{DataLine.eth}}<br>Toluene: {{DataLine.tol}}<br>Acetone: {{DataLine.ace}}<br>Time: {{DataLine.time}}<br>Date: {{DataLine.date}}<br> Latitude: {{DataLine.lon}}
-        <br> Longitude: {{DataLine.lat}}
-      </ion-card-content>
-  </ion-card>
 </ion-content>

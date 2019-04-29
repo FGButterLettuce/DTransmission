@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^7.2.2",
     "@angular/platform-browser-dynamic": "^7.2.2",
     "@angular/router": "^7.2.2",
+    "@ionic-native/background-mode": "^5.5.1",
     "@ionic-native/bluetooth-serial": "^5.3.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/geolocation": "^5.3.0",
@@ -28,6 +29,7 @@
     "@ionic/angular": "^4.1.0",
     "angularfire2": "^5.1.2",
     "cordova-android": "8.0.0",
+    "cordova-plugin-background-mode": "git+https://github.com/katzer/cordova-plugin-background-mode.git",
     "cordova-plugin-bluetooth-serial": "^0.4.7",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-geolocation": "^4.0.1",
@@ -81,7 +83,8 @@
       },
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-bluetooth-serial": {},
-      "cordova-plugin-geolocation": {}
+      "cordova-plugin-geolocation": {},
+      "cordova-plugin-background-mode": {}
     },
     "platforms": [
       "android"
